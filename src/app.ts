@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes';
+import registrationRoutes from './routes/registration.routes';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ mongoose
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/registration', registrationRoutes);
 
 // Start the server
 const port = process.env.PORT || 3000;
