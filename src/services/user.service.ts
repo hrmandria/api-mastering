@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { Request } from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/user.model";
+import { default as User, default as userModel } from "../models/user.model";
 
 export const registerUser = async (
   email: string,
@@ -59,4 +59,14 @@ export const authenticateUser = async (req: Request): Promise<Object> => {
   } catch (error) {
     throw new Error("Access denied. Invalid token.");
   }
+};
+
+export const linkMastering = async (masteringId: any, userId: string) => {
+  const user = await userModel.findById(userId);
+  if (!user) console.log("cannot find user");
+  const currentMastering = user?.masterings;
+
+  user?.masterings.push(masteringId);
+
+  return await user?.save();
 };
