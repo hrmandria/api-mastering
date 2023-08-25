@@ -63,7 +63,7 @@ export const authenticateUser = async (req: Request): Promise<Object> => {
 
 export const linkMastering = async (masteringId: any, userId: string) => {
   const user = await userModel.findById(userId);
-  if (!user) console.log("cannot find user");
+  if (!user) console.log("cannot find user", userId);
   const currentMastering = user?.masterings;
 
   user?.masterings.push(masteringId);
