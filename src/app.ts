@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/auth.routes";
 import masteringRoutes from "./routes/mastering.routes";
 import registrationRoutes from "./routes/registration.routes";
+import mediaRoutes from "./routes/media.routes";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/registration", registrationRoutes);
 app.use("/api/mastering", masteringRoutes);
+app.use("/api/stream",mediaRoutes)
 
 // Start the server
 const port = process.env.PORT || 3000;
