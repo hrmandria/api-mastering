@@ -4,6 +4,7 @@ import { User } from "./user.model";
 export interface Mastering {
   user: User;
   name: string;
+  unmasteredName: string;
   createdAt: Date;
 }
 
@@ -15,6 +16,7 @@ const masteringSchema = new Schema<Mastering>({
   name: {
     type: String,
   },
+  unmasteredName:{type:String},
   createdAt: {
     type: Date,
     default: Date.now(),

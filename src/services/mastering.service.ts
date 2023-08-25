@@ -5,7 +5,9 @@ import { MasteringModel } from "../models/mastering.model";
 export const findUserMasteringList = async (userId: string) => {
   return await MasteringModel.find({ user: userId });
 };
-
+export const findOneMastering = async (masteringId: string) => {
+  return await MasteringModel.findById(masteringId);
+}
 // Call API with promise interface
 
 const callApiDeferred = async function (
@@ -125,8 +127,8 @@ export const getMasteredFiles = async function (directory, files = []) {
   return files[0];
 };
 
-export const createMastering = async (name: string, userId: string) => {
-  const newMastering = await MasteringModel.create({ name, user: userId });
+export const createMastering = async (name: string,unmasteredName:string, userId: string) => {
+  const newMastering = await MasteringModel.create({ name, unmasteredName,user: userId });
 
   return await newMastering.save();
 };
