@@ -9,6 +9,7 @@ import {
   main,
 } from "../services/mastering.service";
 import { linkMastering } from "../services/user.service";
+import { resolve } from "path";
 
 export const getUserMasteringList = async (req: Request, res: Response) => {
   try {
@@ -33,10 +34,10 @@ export const getUserMasteringList = async (req: Request, res: Response) => {
   }
 };
 
-export const getOneMastering = async (req: Request, res: Response)=>{
+export const getOneMastering = async (req: Request, res: Response) => {
   try {
     let token = req.headers.authorization;
-    const {masteringId} = req.query;
+    const { masteringId } = req.query;
     if (!token) {
       return res.status(403).send("Veuillez envoyer votre token");
     }
@@ -46,7 +47,7 @@ export const getOneMastering = async (req: Request, res: Response)=>{
     if (token.includes("Bearer")) {
       token = token.split(" ")[1];
     }
-    
+
     const decoded: { _id: string } = jwt_decode(token);
     const userId: string = decoded._id;
     return res.send(await findOneMastering(masteringId));
@@ -58,7 +59,7 @@ export const getOneMastering = async (req: Request, res: Response)=>{
         "Une erreur s'est produite pendant la recuperation de la liste de vos masterings"
       );
   }
-}
+};
 
 export const masterize = async (req: any, res: Response) => {
   let token: string = req.headers.authorization;
@@ -79,18 +80,22 @@ export const masterize = async (req: any, res: Response) => {
 
   const file = req.file;
   const user_email = user.email;
-  const folderName = "mastered/" + user_email;
+  const folderName = "mastered/";
 
   if (!fs.existsSync(folderName)) {
     fs.mkdirSync(folderName, { recursive: true });
   }
 
-  const outputPath = folderName + "/" + `${file.originalname}_mastered`;
+  const outputPath = folderName + "/" + `mastered-${file.filename}`;
   try {
     if (file) {
       const response = await main(req.file.path, outputPath);
-
-      const newMastering = await createMastering(`${file.originalname}_mastered`,file.originalname, userId);
+      console.log("file", file);
+      const newMastering = await createMastering(
+        `mastered-${file.filename}`,
+        file.filename,
+        userId
+      );
       const updatedUser = await linkMastering(newMastering, userId);
 
       return res.json({
@@ -108,7 +113,9 @@ export const masterize = async (req: any, res: Response) => {
 // const absolutePath = join(dirname(currentFilePath), "../..");
 
 export const getFile = async (req, res) => {
+  const filepath = resolve(`mastered`);
+  console.log("filepath: ", filepath);
   // const filepath = `${absolutePath}/mastered`;
-  // const { username, filename } = req.query;
-  // res.download(`${filepath}/${username}/${filename}`);
+  const { username, filename } = req.query;
+  res.download(`${filepath}/${filename}`);
 };
